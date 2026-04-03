@@ -59,6 +59,8 @@ The model performed very well on validation set with around 97% accuracy and ver
 
 ### After Retraining — Model Model Performance
 
+I decided to retrain the model because I wanted to improve the Normal recall, since the model was missing many Normal cases. I thought increasing class weight for Normal might help the model focus more on that class.
+
 Validation Set
 
 | Class | Precision | Recall | F1-Score | Support |
@@ -80,8 +82,28 @@ Test Set
 | Weighted Avg | 0.89 | 0.88 | 0.88 | 624 |
 
 
-I decided to retrain the model because I wanted to improve the Normal recall, since the model was missing many Normal cases. I thought increasing class weight for Normal might help the model focus more on that class.
-
-After retraining with stronger class weights, I used manual weights of 3.0 for Normal and 1.0 for Pneumonia instead of automatic values. This means the model will get more penalty when it makes mistake on Normal class. However, after retraining the results did not improve much. The Normal recall on test set only increased slightly from around 70% to 73%, and validation accuracy also dropped a little from 97% to 96%. The overall test accuracy stayed almost same at 88%.
+After retraining with stronger class weights the results did not improve significantly. Normal Recall on test set only improved slightly from 70% to 73% while validation accuracy dropped slightly from 97% to 96%. The overall test accuracy remained same at 88%.
 
 The reason for this is that the problem is not mainly in class weights, but in the data itself. The test set has some Normal X-ray images which look very similar to Pneumonia, so the model gets confused. Because of this, even after retraining, performance does not improve much. To fix this properly, we would need more better and diverse Normal images or a more balanced dataset.
+
+### Confusion Matrix Analysis
+
+In confusion matrix analysis, for validation set the model performed very well. It correctly predicted most of the Normal and Pneumonia cases, with only few mistakes. Only 5 Normal images were predicted wrong and 21 Pneumonia images were missed, which is very small, so overall performance on validation data is very strong.
+
+But in test set, the results were a bit different. The model still predicted almost all Pneumonia cases correctly, but it made more mistakes on Normal cases. Around 75 Normal images were wrongly predicted as Pneumonia, which is quite high. Only few Pneumonia cases were missed. This shows that the model is very good at detecting disease, but struggles more in correctly identifying Normal cases on harder test data.
+
+### Threshold Tuning
+
+After evaluation, I applied threshold tuning to improve Normal recall without retraining the model. By default the model predicts Pneumonia if probability is 50% or more, but I tested different threshold values to find a better balance.
+
+| Threshold | Accuracy | Normal Recall | Pneumonia Recall | Macro F1 |
+|-----------|----------|---------------|------------------|----------|
+| 0.50 (default) | 88% | 70% | 100% | 87% |
+| 0.65 | 90% | 74% | 99% | 88% |
+| 0.70 | 90.38% | 76% | 99% | 89.18% |
+| 0.75 | 90.87% | 77% | 99% | 89.76% |
+| 0.80 | 90.87% | 78% | 98.46% | 89.81% |
+
+When I increased the threshold, the model needed more confidence before predicting Pneumonia, so it reduced false Pneumonia predictions. Because of this, Normal recall improved from around 70% to 78% and overall accuracy also increased to around 90%. But Pneumonia recall dropped slightly from 100% to around 98%, which is still very good.
+
+The improvement was useful, but it also reached a limit around 78% Normal recall. This shows that threshold tuning helps, but it cannot fully fix the problem because of data differences. Finally, I selected threshold 0.65 as it gives a good balance between Normal and Pneumonia prediction for final results.
