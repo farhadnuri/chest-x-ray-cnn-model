@@ -27,3 +27,31 @@ I used CrossEntropyLoss with class weights as loss function because it is convex
 ### Training Phase 
 
 In training phase, I trained the model in two steps. First, I froze all pretrained layers and only trained the final layer for some epochs so it can learn the new task. Then in second phase, I unfroze all layers and trained the full model with a very low learning rate. As a result, the model adjust slowly without damaging the pretrained knowledge. I also saved the best model based on validation loss during training.
+
+### Output Analysis
+
+### Before Retraining — Original Model Results
+
+Validation Set
+
+| Class | Precision | Recall | F1-Score | Support |
+|-------|-----------|--------|----------|---------|
+| NORMAL | 0.93 | 0.98 | 0.95 | 213 |
+| PNEUMONIA | 0.99 | 0.97 | 0.98 | 572 |
+| **Accuracy** | | | **0.97** | **785** |
+| Macro Avg | 0.96 | 0.98 | 0.97 | 785 |
+| Weighted Avg | 0.98 | 0.97 | 0.97 | 785 |
+
+ROC-AUC Score: 0.9965
+
+Test Set
+
+| Class | Precision | Recall | F1-Score | Support |
+|-------|-----------|--------|----------|---------|
+| NORMAL | 0.99 | 0.70 | 0.82 | 234 |
+| PNEUMONIA | 0.85 | 1.00 | 0.92 | 390 |
+| **Accuracy** | | | **0.88** | **624** |
+| Macro Avg | 0.92 | 0.85 | 0.87 | 624 |
+| Weighted Avg | 0.90 | 0.88 | 0.88 | 624 |
+
+The model performed very well on validation set with around 97% accuracy and very high F1 score. But on test set the accuracy dropped to around 88%, and more importantly the recall for Normal class dropped to around 70%. This means the model is missing many actual Normal cases and predicting them as Pneumonia. On the other side, Pneumonia recall was 100%, so the model is not missing any sick patient.
