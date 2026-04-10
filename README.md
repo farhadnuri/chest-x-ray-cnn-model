@@ -104,6 +104,24 @@ After evaluation, I applied threshold tuning to improve Normal recall without re
 | 0.75 | 90.87% | 77% | 99% | 89.76% |
 | 0.80 | 90.87% | 78% | 98.46% | 89.81% |
 
-When I increased the threshold, the model needed more confidence before predicting Pneumonia, so it reduced false Pneumonia predictions. Because of this, Normal recall improved from around 70% to 78% and overall accuracy also increased to around 90%. But Pneumonia recall dropped slightly from 100% to around 98%, which is still very good.
+When I increased the threshold, the model needed more confidence before predicting Pneumonia, so it reduced false Pneumonia predictions. Because of this, Normal recall improved from around 70% to 78% and overall accuracy also increased to around 90%. But Pneumonia recall dropped slightly from 100% to around 98%.
 
 The improvement was useful, but it also reached a limit around 78% Normal recall. This shows that threshold tuning helps, but it cannot fully fix the problem because of data differences. Finally, I selected threshold 0.65 as it gives a good balance between Normal and Pneumonia prediction for final results.
+
+### Summary
+
+The ResNet18 CNN model with transfer learning was able to classify chest X-ray images into Normal and Pneumonia quite well, with around 90% test accuracy and very high ROC-AUC close to 0.996. This shows the model can separate the two classes almost perfectly in most cases. The Pneumonia recall is around 99% on test set. This means the model almost never misses a sick patient.
+
+
+| Metric | Value | 
+|--------|-------|
+| Final Accuracy | 90% | 
+| Normal Precision | 0.96 | 
+| Normal Recall | 0.74 | 
+| Pneumonia Precision | 0.86 | 
+| Pneumonia Recall | 0.99 | 
+| Macro F1 | 0.88 | 
+| Weighted F1 | 0.89 |
+| ROC-AUC | 0.9965 | 
+| Optimal Threshold | 0.65 | 
+| Overfitting | None | 
