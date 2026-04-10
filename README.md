@@ -120,8 +120,8 @@ The ResNet18 CNN model with transfer learning was able to classify chest X-ray i
 | Normal Recall | 0.74 | 
 | Pneumonia Precision | 0.86 | 
 | Pneumonia Recall | 0.99 | 
-| Macro F1 | 0.88 | 
 | Weighted F1 | 0.89 |
 | ROC-AUC | 0.9965 | 
 | Optimal Threshold | 0.65 | 
-| Overfitting | None | 
+
+The gap between validation accuracy 96% and test accuracy 90% is mainly because test data is more difficult. Also from training curves, both training and validation loss decreased together, so model was learning properly without any big issue.
